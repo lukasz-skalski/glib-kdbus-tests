@@ -1,0 +1,62 @@
+===============
+= Description =
+===============
+
+This test application is part of GLib-kdbus (GLib library with kdbus
+transport) development process. The most important tasks in new
+transport implementation are:
+
+* low-level support for kdbus,
+
+* support for two new bus types called "user" and "machine",
+
+* new library API for common tasks such as fetching the list of name
+  owners on the bus, checking sender's PID, ..., (because it is not
+  permitted to make calls to the org.freedesktop.DBus destination on
+  the new bus types),
+
+This test application allows you test all above new features. More info
+about GLib-kdbus project status and new API for kdbus pruposes you can
+find here:
+
+https://github.com/lukasz-skalski/glib
+
+
+================
+= Requirements =
+================
+
+* Linux ditribution with latest systemd and kdbus module,
+* GLib with kdbus transport,
+
+
+===================================================================
+= How to prepare Arch distribution wtih latest systemd and kdbus  =
+===================================================================
+
+Detailed description how to prepare Linux distribution with kdbus
+(without dbus-daemon) you can find here:
+
+ADD LINK HERE
+
+
+=================================================
+= GLib with kdbus trasport installation process =
+=================================================
+
+Download GLib with kdbus support:
+
+git clone https://github.com/lukasz-skalski/glib.git -b wip/kdbus-support
+
+Simple install procedure:
+
+ * cd glib 				# change to glib directory
+ * ./configure --enable-kdbus		# run the `configure' script
+ * make && make install			# build GLIB
+
+
+======================
+= Sample test output =
+======================
+
+TODO
