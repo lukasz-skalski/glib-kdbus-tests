@@ -35,7 +35,7 @@ int main (int argc, char** argv)
   GError *error = NULL;
 
   /* connect to the bus */
-  connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+  connection = g_bus_get_sync (G_BUS_TYPE_MACHINE, NULL, &error);
   if (connection == NULL)
     {
       g_print ("Error connecting to D-Bus session bus: %s\n", error->message);
