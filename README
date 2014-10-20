@@ -59,4 +59,27 @@ Simple install procedure:
 = Sample test output =
 ======================
 
-TODO
+g_dbus_get_bus_id() - bus_id: 654d5989ffd24940bb857e1d5bd2233d
+
+g_dbus_get_list_names()
+   :1.20
+   :1.1
+   org.freedesktop.systemd1
+   :1.63
+
+g_dbus_get_list_activatable_names()
+   org.freedesktop.timedate1
+   org.freedesktop.locale1
+   org.freedesktop.hostname1
+   org.freedesktop.resolve1
+   org.freedesktop.machine1
+
+g_dbus_get_list_queued_owners
+
+g_dbus_get_name_owner() - name: org.freedesktop.systemd1, owner: :1.1
+
+g_dbus_name_has_owner() - name: org.freedesktop.systemd1, has_owner: 1
+
+g_dbus_get_connection_pid() - name: org.freedesktop.systemd1, PID: 1
+
+g_dbus_get_connection_uid() - name: org.freedesktop.systemd1, UID: 0
