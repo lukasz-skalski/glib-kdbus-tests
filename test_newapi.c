@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include <gio/gio.h>
 
+GMainLoop *g_main_loop;
+gchar *myname = "org.kdbus.test";
 gchar *testname = "org.freedesktop.systemd1";
 
 /* Commandline options */
@@ -28,11 +30,24 @@ GOptionEntry entries[] =
   { NULL }
 };
 
+/* Handlers */
+static void name_acquired_handler (GDBusConnection *connection, const gchar *name, gpointer user_data);
+static void name_lost_handler (GDBusConnection *connection, const gchar *name, gpointer user_data);
+
+/* SIGINT handler */
+static gboolean
+sigint_handler (gpointer user_data)
+{
+  g_main_loop_quit (g_main_loop);
+  return TRUE;
+}
+
 int main (int argc, char** argv)
 {
   GDBusConnection *connection = NULL;
   GOptionContext *context = NULL;
   GError *error = NULL;
+  guint owner_id, signal_id;
 
   /* connect to the bus */
   connection = g_bus_get_sync (G_BUS_TYPE_MACHINE, NULL, &error);
@@ -42,6 +57,15 @@ int main (int argc, char** argv)
       g_error_free (error);
       exit (EXIT_FAILURE);
     }
+
+  /* own name */
+  owner_id = g_bus_own_name_on_connection (connection,
+                                           myname,
+                                           G_BUS_NAME_OWNER_FLAGS_NONE,
+                                           name_acquired_handler,
+                                           name_lost_handler,
+                                           NULL,
+                                           NULL);
 
   /* parse commandline options */
   context = g_option_context_new ("- GLib-kdbus new API test");
@@ -58,6 +82,9 @@ int main (int argc, char** argv)
       g_print ("Please use valid d-bus name\n");
       exit (EXIT_FAILURE);
     }
+
+  /* handle SIGINT */
+  signal_id = g_unix_signal_add (SIGINT, sigint_handler, NULL);
 
  /* --------------------------------------------------------------------------
   *  
@@ -232,9 +259,33 @@ int main (int argc, char** argv)
   else
     g_print ("\ng_dbus_get_connection_uid() - name: %s, UID: %d\n", testname, uid);
 
+  g_main_loop = g_main_loop_new (NULL, FALSE);
+  g_main_loop_run (g_main_loop);
 
+  g_bus_unown_name (owner_id);
+  while(1);
   return EXIT_SUCCESS;
+
 error:
   g_error_free (error);
   return EXIT_FAILURE;
+}
+
+
+/*
+ * Handler to invoke when name is acquired or NULL
+ */
+static void name_acquired_handler (GDBusConnection *connection,const gchar *name,gpointer user_data)
+{
+  g_print ("HANDLER: name_acquired_handler\n");
+}
+
+
+/*
+ * Handler to invoke when name is lost or NULL
+ */
+static void name_lost_handler (GDBusConnection *connection,const gchar *name,gpointer user_data)
+{
+  g_print ("HANDLER: name_lost_handler\n");
+  exit(1);
 }
