@@ -263,7 +263,6 @@ int main (int argc, char** argv)
   g_main_loop_run (g_main_loop);
 
   g_bus_unown_name (owner_id);
-  while(1);
   return EXIT_SUCCESS;
 
 error:
