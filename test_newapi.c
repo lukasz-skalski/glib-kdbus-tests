@@ -174,7 +174,7 @@ int main (int argc, char** argv)
   else
     {
       int i=0;
-      g_print ("\ng_dbus_get_list_queued_owners\n");
+      g_print ("\ng_dbus_get_list_queued_owners()\n");
       while (list_que_own[i])
         g_print ("   %s\n", list_que_own[i++]);
     }
@@ -200,26 +200,6 @@ int main (int argc, char** argv)
   else
     g_print ("\ng_dbus_get_name_owner() - name: %s, owner: %s\n", testname, owner);
   g_free (owner);
-
-
- /* --------------------------------------------------------------------------
-  *  
-  * Test g_dbus_name_has_owner() function
-  *
-  * Returns: %TRUE if specified name exists (currently has an owner)
-  *          If the requested name doesn't have an owner or @error is
-  *          set, function returns %FALSE.
-  *
-  * -------------------------------------------------------------------------- */
-
-  gboolean has_owner = g_dbus_name_has_owner (connection, testname, &error);
-  if (NULL)
-    {
-      g_error ("g_dbus_name_has_owner(): %s\n", error->message);
-      goto error;
-    }
-  else
-    g_print ("\ng_dbus_name_has_owner() - name: %s, has_owner: %d\n", testname, has_owner);
 
 
  /* --------------------------------------------------------------------------
